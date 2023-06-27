@@ -1,9 +1,6 @@
 [submodule "ffmpeg"]
 	path = modules/ffmpeg
 	url = https://github.com/FFmpeg/FFmpeg.git
-[submodule "lame"]
-	path = modules/lame
-	url = https://github.com/rbrito/deprecated-lame-mirror.git
 [submodule "ogg"]
 	path = modules/ogg
 	url = https://gitlab.xiph.org/xiph/ogg.git
@@ -28,33 +25,27 @@
 [submodule "voamrwbenc"]
 	path = modules/voamrwbenc
 	url = https://github.com/Distrotech/vo-amrwbenc.git
-[submodule "sdl2"]
-	path = modules/sdl2
-	url = https://github.com/spurious/SDL-mirror.git
 [submodule "webp"]
 	path = modules/webp
 	url = https://github.com/webmproject/libwebp.git
-[submodule "zlib"]
-	path = modules/zlib
-	url = https://github.com/madler/zlib.git
 [submodule "jpeg"]
 	path = modules/jpeg
 	url = https://github.com/uclouvain/openjpeg.git
 [submodule "x265"]
 	path = modules/x265
 	url = https://github.com/videolan/x265.git
-[submodule "orc"]
-	path = modules/orc
-	url = https://salsa.debian.org/gstreamer-team/orc.git
-[submodule "theora"]
-	path = modules/theora
-	url = https://github.com/Distrotech/libtheora.git
-[submodule "bzip2"]
-	path = modules/bzip2
-	url = https://github.com/opencor/bzip2.git
-[submodule "numa"]
-	path = modules/numa
-	url = https://github.com/numactl/numactl.git
 [submodule "aom"]
 	path = modules/aom
 	url = https://aomedia.googlesource.com/aom
+[submodule "modules/openssl"]
+	path = modules/openssl
+	url = https://github.com/openssl/openssl.git
+[submodule "modules/sdl"]
+	path = modules/sdl
+	url = https://github.com/libsdl-org/SDL.git
+[submodule "modules/theora"]
+	path = modules/theora
+	url = https://github.com/xiph/theora.git
+[submodule "modules/zlib"]
+	path = modules/zlib
+	url = https://github.com/madler/zlib.git
