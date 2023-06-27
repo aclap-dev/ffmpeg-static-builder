@@ -1,0 +1,60 @@
+[submodule "ffmpeg"]
+	path = ffmpeg
+	url = https://github.com/FFmpeg/FFmpeg.git
+[submodule "lame"]
+	path = lame
+	url = https://github.com/rbrito/deprecated-lame-mirror.git
+[submodule "ogg"]
+	path = ogg
+	url = https://gitlab.xiph.org/xiph/ogg.git
+[submodule "vorbis"]
+	path = vorbis
+	url = https://gitlab.xiph.org/xiph/vorbis.git
+[submodule "opus"]
+	path = opus
+	url = https://gitlab.xiph.org/xiph/opus.git
+[submodule "vpx"]
+	path = vpx
+	url = https://chromium.googlesource.com/webm/libvpx
+[submodule "x264"]
+	path = x264
+	url = https://code.videolan.org/videolan/x264.git
+[submodule "xvid"]
+	path = xvid
+	url = https://github.com/Distrotech/xvidcore.git
+[submodule "ocamr"]
+	path = ocamr
+	url = https://github.com/Distrotech/opencore-amr.git
+[submodule "voamrwbenc"]
+	path = voamrwbenc
+	url = https://github.com/Distrotech/vo-amrwbenc.git
+[submodule "sdl2"]
+	path = sdl2
+	url = https://github.com/spurious/SDL-mirror.git
+[submodule "webp"]
+	path = webp
+	url = https://github.com/webmproject/libwebp.git
+[submodule "zlib"]
+	path = zlib
+	url = https://github.com/madler/zlib.git
+[submodule "jpeg"]
+	path = jpeg
+	url = https://github.com/uclouvain/openjpeg.git
+[submodule "x265"]
+	path = x265
+	url = https://github.com/videolan/x265.git
+[submodule "orc"]
+	path = orc
+	url = https://salsa.debian.org/gstreamer-team/orc.git
+[submodule "theora"]
+	path = theora
+	url = https://github.com/Distrotech/libtheora.git
+[submodule "bzip2"]
+	path = bzip2
+	url = https://github.com/opencor/bzip2.git
+[submodule "numa"]
+	path = numa
+	url = https://github.com/numactl/numactl.git
+[submodule "aom"]
+	path = aom
+	url = https://aomedia.googlesource.com/aom
