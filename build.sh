@@ -48,7 +48,7 @@ function build {
     echo "Pulling $1 …"
     git submodule update --init .
   fi
-  echo -n "Compiling $1… "
+  echo "Compiling $1… "
   if [ ! -d $dist/$1 ]; then
     maybe_clean_module
     build_$1 $1
@@ -229,7 +229,6 @@ function build_vpx {
 }
 
 function build_openssl {
-  # -static option doesn't work
   ./Configure --prefix=$dist/$1
   make -$MJ
   make install_sw
@@ -278,7 +277,6 @@ function build_ffmpeg {
     --disable-autodetect \
     --prefix=$dist/ffmpeg \
     --enable-libtheora \
-    --disable-libxvid \
     --enable-libvo-amrwbenc \
     --enable-libopencore-amrnb \
     --enable-libopencore-amrwb \
@@ -288,8 +286,8 @@ function build_ffmpeg {
     --enable-version3 \
     --enable-libopus \
     --enable-libvorbis \
-    --disable-libx264 \
-    --disable-libx265 \
+    --enable-libx264 \
+    --enable-libx265 \
     --enable-libaom \
     --disable-indev=sndio \
     --disable-outdev=sndio \
@@ -301,9 +299,6 @@ function build_ffmpeg {
     --enable-pic \
     --enable-openssl \
     --disable-doc
-
-    # --enable-sdl2 \
-    # --enable-ffplay \
 
   make -$MJ
   make install

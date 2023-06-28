@@ -21,8 +21,10 @@ directory in `dist`.
 
 Todo:
 ----
-- Windows, Linux, Mac Intel (for now, only tested on Macbook M1)
+- Windows, Mac Intel
 - test MP3 support (no lame?)
-- pull submodule if non-existent
 - remove dependency on libc++ (x265)
 - no ffplay
+- re-enable xvid: --enable-libxvid
+- --enable-sdl2 --enable-ffplay
+
