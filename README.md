@@ -13,7 +13,15 @@ erased by the script (see `maybe_clean_module` function).
 Usage:
 -----
 
+```
 $ ./build.sh
+```
+
+Build for Mac x86 on Mac Arm:
+
+```
+$ arch -x86_64 ./build.sh
+```
 
 Compilation result will be under the `dist/ffmpeg` directory.
 To rebuild a dependency or ffmpeg itself, `rm -rf` the relevant
