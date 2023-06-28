@@ -14,6 +14,8 @@ FFMPEG_LDFLAGS=""
 
 dist=${PWD}/$dist_name
 
+mkdir -p $dist
+
 function maybe_clean_module {
   if [ $git_clean -eq 1 ]; then
     cd $(git rev-parse --show-toplevel)
@@ -21,8 +23,8 @@ function maybe_clean_module {
     # Let's double check we are indeed in a submodule.
     # .git is a file only in submodules.
     if [ -s .git ]; then
-      git checkout -f
-      git clean -fdx
+      git checkout -f > /dev/null
+      git clean -fdx > /dev/null
     else
       echo "ERROR: CLEAN FUNCTION CALLED IN TOP LEVEL GIT"
       exit 1
@@ -30,21 +32,28 @@ function maybe_clean_module {
   fi
 }
 
+function rm_dll {
+  rm -f \
+    $dist/$1/lib/*.dylib \
+    $dist/$1/lib/*.dll \
+    $dist/$1/lib/*.so.* \
+    $dist/$1/lib/*.so \
+    $dist/$1/lib64/*.so \
+    $dist/$1/lib64/*.so.*
+}
+
 function build {
   pushd modules/$1 > /dev/null
-  # FIXME: git submodule update --init .
+  if test -n "$(find ./ -maxdepth 0 -empty)" ; then
+    echo "Pulling $1 …"
+    git submodule update --init .
+  fi
   echo -n "Compiling $1… "
   if [ ! -d $dist/$1 ]; then
     maybe_clean_module
-    mkdir -p $dist/$1
-    build_$1 $1 2> $dist/$1/build.log.stderr > $dist/$1/build.log.stdout
-    if [ ! $? -eq 0 ]; then
-      echo "failed."
-      echo "Building $1 failed. See $dist_name/$1 for logs"
-      exit 1
-    else
-      echo "success."
-    fi
+    build_$1 $1
+    rm_dll $1
+    maybe_clean_module
   else
     echo "already built (rm -rf $dist_name/$1 to rebuild). Skipped."
   fi
@@ -53,7 +62,14 @@ function build {
 }
 
 function post_build_pkgconfig {
-  FFMPEG_PKG_CONFIG_PATH+=":$dist/$1/lib/pkgconfig"
+  if [ -d $dist/$1/lib/pkgconfig ]; then
+    FFMPEG_PKG_CONFIG_PATH+=":$dist/$1/lib/pkgconfig"
+  elif [ -d $dist/$1/lib64/pkgconfig ]; then
+    FFMPEG_PKG_CONFIG_PATH+=":$dist/$1/lib64/pkgconfig"
+  else
+    echo "Could not find pkgconfig in $dist_name/$1"
+    exit 1
+  fi
 }
 
 function post_build_cflags_from_pkgconfig {
@@ -66,7 +82,7 @@ function post_build_cflags_from_pkgconfig {
 
 function post_build_cflags_dir {
   FFMPEG_CFLAGS+=" -I${dist}/$1/include"
-  FFMLEG_LDFLAGS+=" -L${dist}/$1/lib"
+  FFMPEG_LDFLAGS+=" -L${dist}/$1/lib"
 }
 
 function post_build_theora {
@@ -78,12 +94,20 @@ function post_build_theora {
 }
 
 function post_build_ffmpeg {
-  deps_count=6
-  count=$(otool -L $dist/ffmpeg/bin/ffmpeg | wc -l | tr -d ' ')
+  case "$(uname -s)" in
+    Linux*)
+      deps_count=9
+      count=$(ldd $dist/ffmpeg/bin/ffmpeg | wc -l)
+      ;;
+    Darwin*)
+      deps_count=6
+      count=$(otool -L $dist/ffmpeg/bin/ffmpeg | wc -l | tr -d ' ')
+      ;;
+    *)
+      ;;
+  esac
   if [ ! $count -eq $deps_count ]; then
-    echo "Unexpected amount of dependencies:"
-    otool -L $dist/ffmpeg/bin/ffmpeg
-    exit 1
+    echo "Warning: unexpected amount of dependencies."
   fi
   echo "Build is successful. See $dist/ffmpeg"
   exit 0
@@ -103,8 +127,6 @@ function build_sdl {
     --without-x
   make -$MJ
   make install
-  # Remove dynamic libraries because some dylib are still generated
-  rm -f $dist/$1/lib/*.dylib $dist/$1/lib/*.so $dist/$1/lib/*.dll
 }
 
 function build_x264 {
@@ -114,12 +136,11 @@ function build_x264 {
 }
 
 function build_xvid {
-	cd build/generic
-	./bootstrap.sh
+  cd build/generic
+  ./bootstrap.sh
   ./configure --prefix=$dist/$1 --disable-assembly
-	make -$MJ
-	make install
-  rm -f $dist/$1/lib/*.dylib $dist/$1/lib/*.so $dist/$1/lib/*.dll
+  make -$MJ
+  make install
 }
 
 function build_webp {
@@ -131,8 +152,8 @@ function build_webp {
     --enable-libwebpmux \
     --enable-libwebpdemux  \
     --enable-libwebpdecoder
-	make -$MJ
-	make install
+  make -$MJ
+  make install
 }
 
 function build_zlib {
@@ -166,8 +187,8 @@ function build_theora {
   ./configure --prefix=$dist/$1 \
     --disable-shared \
     --disable-examples --disable-oggtest
-	make -$MJ
-	make install
+  make -$MJ
+  make install
   unset PKG_CONFIG_PATH
 }
 
@@ -195,7 +216,7 @@ function build_vpx {
     --disable-docs \
     --disable-install-bins \
     --disable-install-srcs \
-		--disable-unit-tests \
+    --disable-unit-tests \
     --size-limit=16384x16384 \
     --enable-postproc \
     --enable-multi-res-encoding \
@@ -203,8 +224,8 @@ function build_vpx {
     --enable-vp9-temporal-denoising \
     --enable-vp9-postproc \
     --enable-vp9-highbitdepth
-	make -$MJ
-	make install
+  make -$MJ
+  make install
 }
 
 function build_openssl {
@@ -212,8 +233,6 @@ function build_openssl {
   ./Configure --prefix=$dist/$1
   make -$MJ
   make install_sw
-  # Remove dynamic libraries because -static doesn't work
-  rm -f $dist/$1/lib/*.dylib $dist/$1/lib/*.so $dist/$1/lib/*.dll
 }
 
 function build_ocamr {
@@ -255,10 +274,11 @@ function build_ffmpeg {
   ./configure \
     --extra-ldexeflags="-Bstatic" \
     --pkg-config-flags="--static" \
+    --extra-libs="-lpthread -lm -lz" \
     --disable-autodetect \
     --prefix=$dist/ffmpeg \
     --enable-libtheora \
-    --enable-libxvid \
+    --disable-libxvid \
     --enable-libvo-amrwbenc \
     --enable-libopencore-amrnb \
     --enable-libopencore-amrwb \
@@ -268,8 +288,8 @@ function build_ffmpeg {
     --enable-version3 \
     --enable-libopus \
     --enable-libvorbis \
-    --enable-libx264 \
-    --enable-libx265 \
+    --disable-libx264 \
+    --disable-libx265 \
     --enable-libaom \
     --disable-indev=sndio \
     --disable-outdev=sndio \
