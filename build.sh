@@ -44,6 +44,7 @@ function maybe_clean_module {
 # - not all libraries build system allow to only compile static libs
 # - not sure how to force ffmpeg to prioritize static libs.
 function rm_dll {
+  echo rm_dll
   rm -f \
     $dist/$1/lib/*.dylib \
     $dist/$1/lib/*.dll \
@@ -135,6 +136,7 @@ function build_default_autotools {
 function build_sdl {
   ./autogen.sh
   ./configure --prefix=$dist/$1 \
+    $autotools_options \
     --disable-shared \
     --enable-static \
     --without-x
@@ -143,7 +145,11 @@ function build_sdl {
 }
 
 function build_x264 {
-  ./configure --prefix=$dist/$1 --enable-static --disable-cli
+  ./configure --prefix=$dist/$1 \
+    $autotools_options \
+    $x264_options \
+    --enable-static \
+    --disable-cli
   make -$MJ
   make install
 }
@@ -151,7 +157,10 @@ function build_x264 {
 function build_xvid {
   cd build/generic
   ./bootstrap.sh
-  ./configure --prefix=$dist/$1 --disable-assembly
+  ./configure \
+    $autotools_options \
+    --prefix=$dist/$1 \
+    --disable-assembly
   make -$MJ
   make install
 }
@@ -159,6 +168,7 @@ function build_xvid {
 function build_webp {
   ./autogen.sh
   ./configure --prefix=$dist/$1 \
+    $autotools_options \
     --disable-cli \
     --disable-shared \
     --enable-static \
@@ -170,7 +180,9 @@ function build_webp {
 }
 
 function build_zlib {
-  ./configure --prefix=$dist/$1 --static
+  ./configure --prefix=$dist/$1 \
+    $autotools_options \
+    --static
   make -$MJ
   make install
 }
@@ -178,15 +190,18 @@ function build_zlib {
 function build_jpeg {
   export CFLAGS="-DPNG_ARM_NEON_OPT=0"
   cmake \
+    $cmake_options \
     -DBUILD_THIRDPARTY=1 \
-    -DBUILD_SHARED_LIBS:bool=off \
+    -DBUILD_SHARED_LIBS=0 \
     -DCMAKE_INSTALL_PREFIX="$dist/$1" .
   make install
   unset CFLAGS
 }
 
 function build_x265 {
-  cmake -DCMAKE_INSTALL_PREFIX="$dist/$1" \
+  cmake \
+    $cmake_options \
+    -DCMAKE_INSTALL_PREFIX="$dist/$1" \
     -DENABLE_SHARED=OFF \
     -DENABLE_CLI=OFF \
     source
@@ -198,6 +213,7 @@ function build_theora {
   export PKG_CONFIG_PATH=$dist/ogg/lib/pkgconfig
   ./autogen.sh
   ./configure --prefix=$dist/$1 \
+    $autotools_options \
     --disable-shared \
     --disable-examples --disable-oggtest
   make -$MJ
@@ -209,12 +225,12 @@ function build_aom {
   mkdir aom_build
   cd aom_build
   cmake \
+    $cmake_options \
     -DCMAKE_INSTALL_PREFIX="$dist/$1" \
     -DBUILD_SHARED_LIBS=0 \
     -DENABLE_EXAMPLES=0 \
     -DENABLE_TESTS=0 \
     -DENABLE_TOOLS=0 \
-    -DCMAKE_BUILD_TYPE=Release \
     -DCMAKE_BUILD_TYPE=Release \
     ..
   make install
@@ -222,6 +238,7 @@ function build_aom {
 
 function build_vpx {
   ./configure \
+    $vpx_options \
     --prefix=$dist/$1 \
     --disable-shared \
     --disable-examples \
@@ -233,6 +250,8 @@ function build_vpx {
     --size-limit=16384x16384 \
     --enable-postproc \
     --enable-multi-res-encoding \
+    --enable-vp8 \
+    --enable-vp9 \
     --enable-temporal-denoising \
     --enable-vp9-temporal-denoising \
     --enable-vp9-postproc \
@@ -242,7 +261,7 @@ function build_vpx {
 }
 
 function build_openssl {
-  ./Configure --prefix=$dist/$1
+  ./Configure $openssl_options --prefix=$dist/$1
   make -$MJ
   make install_sw
 }
@@ -262,7 +281,7 @@ function build_ogg {
 
 function build_opus {
   ./autogen.sh
-  build_default_autotools $1
+  CPPFLAGS=$opus_cppflags build_default_autotools $1
 }
 
 function build_vorbis {
@@ -289,44 +308,31 @@ function build_ffmpeg {
     --pkg-config-flags="--static" \
     --disable-autodetect \
     --prefix=$dist/ffmpeg \
-    --disable-libtheora \
     --enable-version3 \
+    --pkg-config=pkg-config \
+    --enable-runtime-cpudetect \
+    --enable-libtheora \
+    --enable-libvpx \
+    --enable-libvorbis \
+    --disable-indev=sndio \
+    --disable-outdev=sndio \
     --enable-libopencore-amrnb \
     --enable-libopencore-amrwb \
     --enable-gpl \
-    --disable-indev=sndio \
-    --disable-outdev=sndio \
+    --enable-openssl \
+    --enable-libvo-amrwbenc \
+    --enable-libopus \
+    --enable-libx264 \
+    --enable-libx265 \
+    --enable-libaom \
+    --enable-libwebp \
+    --enable-ffprobe \
+    --enable-pic \
     --disable-doc
 
-  # ./configure \
-  #   --extra-ldexeflags="-Bstatic" \
-  #   --pkg-config-flags="--static" \
-  #   --extra-libs="-lpthread -lm -lz" \
-  #   --disable-autodetect \
-  #   --prefix=$dist/ffmpeg \
-  #   --enable-libtheora \
-  #   --enable-libvo-amrwbenc \
-  #   --enable-libopencore-amrnb \
-  #   --enable-libopencore-amrwb \
-  #   --enable-gpl \
-  #   --enable-runtime-cpudetect \
-  #   --enable-pthreads \
-  #   --enable-version3 \
-  #   --enable-libopus \
-  #   --enable-libvorbis \
-  #   --enable-libx264 \
-  #   --enable-libx265 \
-  #   --enable-libaom \
-  #   --disable-indev=sndio \
-  #   --disable-outdev=sndio \
-  #   --enable-libvpx \
-  #   --enable-libwebp \
-  #   --enable-zlib \
-  #   --enable-libopenjpeg \
-  #   --enable-ffprobe \
-  #   --enable-pic \
-  #   --enable-openssl \
-  #   --disable-doc
+    # --enable-pthreads \
+    # --enable-libopenjpeg \
+    # --enable-zlib \
 
   make -$MJ
   make install
@@ -334,18 +340,18 @@ function build_ffmpeg {
 
 # build sdl pkgconfig
 # build zlib pkgconfig
-# build openssl pkgconfig
-# build x264 pkgconfig
+build openssl pkgconfig
+build x264 pkgconfig
 # build xvid cflags_dir
-# build webp pkgconfig
-# build jpeg pkgconfig
-# build x265 pkgconfig
-# build aom pkgconfig
-# build vpx pkgconfig
+build webp pkgconfig
+build jpeg pkgconfig
+build x265 pkgconfig
+build aom pkgconfig
+build vpx pkgconfig
 build ocamr cflags_from_pkgconfig opencore-amrnb
-# build voamrwbenc cflags_from_pkgconfig vo-amrwbenc
-# build ogg pkgconfig
-# build opus pkgconfig
-# build theora theora
-# build vorbis pkgconfig
+build voamrwbenc cflags_from_pkgconfig vo-amrwbenc
+build ogg pkgconfig
+build opus pkgconfig
+build theora theora
+build vorbis pkgconfig
 build ffmpeg ffmpeg

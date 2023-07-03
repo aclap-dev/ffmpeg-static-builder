@@ -2,6 +2,11 @@
 
 autotools_options=""
 ffmpeg_configure_options=""
+openssl_options=""
+vpx_options=""
+x264_options=""
+cmake_options=""
+opus_cppflags=""
 
 host_os=$(uname -s)
 host_arch=$(uname -m)
@@ -71,19 +76,50 @@ if [[ $host_os == "mac" && $target_os == "linux" ]]; then
 fi
 
 if [[ $target == "windows-x86_64" ]]; then
-  autotools_options="--host=x86_64-w64-mingw32"
+
+
+  CROSS_COMPILE=x86_64-w64-mingw32-
+
+  export CC="${CROSS_COMPILE}gcc"
+  export CXX="${CROSS_COMPILE}g++"
+  export NM="${CROSS_COMPILE}nm"
+  export STRIP="${CROSS_COMPILE}strip"
+  export RANLIB="${CROSS_COMPILE}ranlib"
+  export AR="${CROSS_COMPILE}ar"
+  export LD="${CROSS_COMPILE}ld"
+  # export PKG_CONFIG="${CROSS_COMPILE}pkg-config"
+  # export PKG_CONFIG_PATH=$ARCHSRCDIR/deps/lib/pkgconfig
+  # export PKG_CONFIG_LIB_DIR=$ARCHSRCDIR/deps/lib/pkgconfig
+  export GCC_LIBDIR=$(ls -d /usr/lib/gcc/x86_64-w64-mingw32/*-posix)
+
+
+
+  _prefix="x86_64-w64-mingw32"
+  autotools_options="--host=$_prefix"
+  # https://github.com/msys2/MINGW-packages/issues/5868
+  opus_cppflags="-D_FORTIFY_SOURCE=0"
+  # vpx_options="--target=x86_64-win64-gcc --as=yasm" # x86-win64-gcc
+  vpx_options="--target=x86_64-win64-gcc"
+  x264_options="--cross-prefix=$_prefix-"
+  openssl_options="mingw64 --cross-compile-prefix=$_prefix-"
+  cmake_options="\
+    -DBUILD_SHARED_LIBS=OFF \
+    -DCMAKE_FIND_ROOT_PATH=/usr/$_prefix \
+    -DCMAKE_FIND_ROOT_PATH_MODE_INCLUDE=ONLY \
+    -DCMAKE_SYSTEM_NAME=Windows \
+    -DCMAKE_RC_COMPILER=$_prefix-windres \
+    -DCMAKE_C_COMPILER=$_prefix-gcc \
+    -DCMAKE_CXX_COMPILER=$_prefix-g++"
   ffmpeg_configure_options="\
     --arch=x86_64 \
     --target-os=mingw32 \
-    --cross-prefix=x86_64-w64-mingw32-"
+    --cross-prefix=$_prefix-"
 fi
 
 if [[ $target == "windows-i686" ]]; then
-  autotools_options="--host=i686-w64-mingw32"
-  ffmpeg_configure_options="\
-    --arch=i686 \
-    --target-os=mingw32 \
-    --cross-prefix=i686-w64-mingw32-"
+  _prefix="i686-w64-mingw32"
+  echo fixme
+  exit 1
 fi
 
 if [[ $host_os == "linux" ]]; then
