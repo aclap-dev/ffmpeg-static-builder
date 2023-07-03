@@ -14,6 +14,9 @@ FFMPEG_PKG_CONFIG_PATH=""
 FFMPEG_CFLAGS=""
 FFMPEG_LDFLAGS=""
 
+autotools_options=""
+cmake_options=""
+
 source ./xcomp.sh
 
 dist_relative_path=$dist_name/$target_os/$target_arch/
@@ -22,8 +25,6 @@ mkdir -p $dist
 
 #FIXME: skipping xvid
 mods="aom jpeg ocamr ogg openssl opus sdl theora voamrwbenc vorbis vpx webp x264 x265 zlib ffmpeg"
-autotools_options=""
-cmake_options=""
 
 for mod in $mods; do
 
