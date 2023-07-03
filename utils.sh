@@ -1,7 +1,4 @@
-function setup_mingw {
-
-  # General binary setup
-
+function set_toolchain_bins {
   export CC="${cross_toolchain_prefix}-gcc"
   export CXX="${cross_toolchain_prefix}-g++"
   export NM="${cross_toolchain_prefix}-nm"
@@ -11,6 +8,20 @@ function setup_mingw {
   export LD="${cross_toolchain_prefix}-ld"
   # FIXME: is that necessary?
   export GCC_LIBDIR=$(ls -d /usr/lib/gcc/${cross_toolchain_prefix}/*-posix)
+}
+
+function unset_toolchain_bins {
+  unset CC
+  unset CXX
+  unset NM
+  unset STRIP
+  unset RANLIB
+  unset AR
+  unset LD
+  unset GCC_LIBDIR
+}
+
+function setup_toolchain {
 
   # Autotools options
 

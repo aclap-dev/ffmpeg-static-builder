@@ -6,6 +6,7 @@ function setup_cross {
 
 function build {
   ./configure --prefix=$dist/$1 \
+    $autotools_options \
     $config_args \
     --enable-static \
     --disable-cli

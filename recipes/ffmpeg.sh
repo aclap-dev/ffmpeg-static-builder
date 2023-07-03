@@ -5,7 +5,7 @@ function setup_cross {
     ffmpeg_configure_options="\
       --arch=x86_64 \
       --target-os=mingw32 \
-      --cross-prefix=$_prefix-"
+      --cross-prefix=$cross_toolchain_prefix-"
   fi
 }
 

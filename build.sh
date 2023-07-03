@@ -14,90 +14,16 @@ FFMPEG_PKG_CONFIG_PATH=""
 FFMPEG_CFLAGS=""
 FFMPEG_LDFLAGS=""
 
-host_os=$(uname -s)
-host_arch=$(uname -m)
-cross_compiling=0
-autotools_options=""
-cmake_options=""
-
-case $host_os in
-  Linux)
-    host_os="linux"
-    ;;
-  Darwin)
-    host_os="mac"
-    ;;
-esac
-
-host="${host_os}-${host_arch}"
-
-case $host in
-  "linux-x86_64" | "mac-x86_64" | "mac-arm64")
-    ;;
-  *)
-    echo "Unsupported build platform"
-    exit 1
-    ;;
-esac
-
-if [ $# -eq 0 ]; then
-  target_os=$host_os
-  target_arch=$host_arch
-else
-  case $1 in
-    linux-x86_64 | \
-    linux-i686 | \
-    windows-x86_64 | \
-    windows-i686 | \
-    mac-x86_64 | \
-    mac-arm64)
-    cross_compiling=1
-        ;;
-    *)
-      echo "Unsupported target: $1"
-      exit 1
-      ;;
-  esac
-
-  target_os=$(echo $1 | cut -f1 -d-)
-  target_arch=$(echo $1 | cut -f2 -d-)
-fi
-
-if [[ $host_os == "linux" && $target_os == "mac" ]]; then
-  echo "Compiling for Mac on Linux is not supported."
-  exit 1
-fi
-
-if [[ $host_os == "mac" && $target_os == "linux" ]]; then
-  echo "Compiling for Linux on Mac is not supported."
-  exit 1
-fi
-
-target="${target_os}-${target_arch}"
-
-if [[ $host_os == "linux" ]]; then
-  if [[ host_arch == "x86_64" && target_arch == "i686" ]]; then
-    # FIXME
-    echo "Not supported yet" # CC="gcc -m32"
-    exit 1
-  fi
-fi
-
-if [[ $target == "windows-x86_64" ]]; then
-  cross_toolchain_prefix="x86_64-w64-mingw32"
-  setup_mingw
-fi
-
-if [[ $target == "windows-i686" ]]; then
-  cross_toolchain_prefix="i686-w64-mingw32"
-  setup_mingw
-fi
+source ./xcomp.sh
 
 dist_relative_path=$dist_name/$target_os/$target_arch/
 dist=${PWD}/$dist_relative_path
 mkdir -p $dist
 
-mods="aom jpeg ocamr ogg openssl opus sdl theora voamrwbenc vorbis vpx webp x264 x265 xvid zlib ffmpeg"
+#FIXME: skipping xvid
+mods="aom jpeg ocamr ogg openssl opus sdl theora voamrwbenc vorbis vpx webp x264 x265 zlib ffmpeg"
+autotools_options=""
+cmake_options=""
 
 for mod in $mods; do
 
@@ -111,14 +37,15 @@ for mod in $mods; do
     git submodule update --init .
   fi
 
-  if [ $cross_compiling -eq 1 ]; then
-    setup_cross $mod
-  fi
-
   if [ ! -d $dist/$mod ]; then
     maybe_clean_module
+    if [ $cross_compiling -eq 1 ]; then
+      setup_cross $mod
+    fi
     echo "Compiling ${mod}… "
     build $mod
+    # Cleanup some exports after modules
+    unset_toolchain_bins
     rm_dll $mod
     maybe_clean_module
   else

@@ -1,12 +1,17 @@
+make_options=""
+
 function setup_cross {
-  true
+  set_toolchain_bins
+  if [[ $target_os == "windows" ]]; then
+    make_options="-f win32/Makefile.gcc"
+    sed -i "s/PREFIX =/PREFIX = $cross_toolchain_prefix-/" win32/Makefile.gcc
+  fi
 }
 
 function build {
   ./configure --prefix=$dist/$1 \
-    $autotools_options \
     --static
-  make -$MJ
+  make $make_options -$MJ
   make install
 }
 

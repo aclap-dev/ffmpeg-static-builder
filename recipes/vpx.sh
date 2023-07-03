@@ -1,7 +1,10 @@
 options=""
 
 function setup_cross {
-  options="--target=x86_64-win64-gcc"
+  set_toolchain_bins
+  if [[ $target_os == "windows" ]]; then
+    options="--target=x86_64-win64-gcc"
+  fi
 }
 
 function build {

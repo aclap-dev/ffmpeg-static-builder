@@ -1,5 +1,5 @@
 function setup_cross {
-  true
+  set_toolchain_bins
 }
 
 function build {
