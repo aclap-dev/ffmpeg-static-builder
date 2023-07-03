@@ -48,7 +48,7 @@ Todo:
 - Windows, Mac Intel
 - build for linux on mac
 - test MP3 support (no lame?)
-- remove dependency on libc++ (x265)
+- remove dependency on libc++ (x265) and libvdso (linux)
 - no ffplay
 - re-enable xvid: --enable-libxvid
 - --enable-sdl2 --enable-ffplay
