@@ -19,13 +19,6 @@ To do a non-cross-compile build:
 $ ./build.sh
 ```
 
-To cross compile:
-
-2 supported host
-
-- linux: can compile all targets but mac-*
-- mac: can compile all targets but linux-*
-
 5 supported targets:
 
 - `linux-x86_64`
@@ -41,13 +34,14 @@ $ ./build.sh <target>
 
 Compilation result will be under the `dist/<os>/<arch>/ffmpeg` directory.
 To rebuild a dependency or ffmpeg itself, `rm -rf` the relevant
-directory in `dist`.
+directory in `dist/<o>/<target>/`.
 
 Todo:
 ----
 - Windows i686
 - Linux i686
 - Mac Intel
+- Tests
 - test MP3 support (no lame?)
 - remove dependency on libc++ (x265) and libvdso (linux)
 - re-enable xvid: --enable-libxvid

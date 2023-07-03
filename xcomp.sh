@@ -64,12 +64,10 @@ if [ $cross_compiling -eq 1 ]; then
     exit 1
   fi
 
-  if [[ $host_os == "linux" ]]; then
-    if [[ $host_arch == "x86_64" && $target_arch == "i686" ]]; then
-      # FIXME
-      echo "Not supported yet" # CC="gcc -m32"
-      exit 1
-    fi
+  if [[ $host_os == "linux" && $target_os == "linux" ]]; then
+    # FIXME
+    echo "Not supported yet" # CC="gcc -m32"
+    exit 1
   fi
 
   if [[ $host_os == "mac" && $target_os == "mac" ]]; then
