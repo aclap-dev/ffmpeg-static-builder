@@ -75,7 +75,6 @@ if [ $cross_compiling -eq 1 ]; then
   if [[ $host_os == "mac" && $target_os == "mac" ]]; then
     if [[ $host_arch == "arm64" && $target_arch == "x86_64" ]]; then
       # Re-run script with rosetta
-      echo "go"
       arch -x86_64 ./build.sh
       exit 0
     else

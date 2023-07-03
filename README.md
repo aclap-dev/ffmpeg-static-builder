@@ -45,11 +45,11 @@ directory in `dist`.
 
 Todo:
 ----
-- Windows, Mac Intel
-- build for linux on mac
+- Windows i686
+- Linux i686
+- Mac Intel
 - test MP3 support (no lame?)
 - remove dependency on libc++ (x265) and libvdso (linux)
-- no ffplay
 - re-enable xvid: --enable-libxvid
 - --enable-sdl2 --enable-ffplay
 
