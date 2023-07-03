@@ -1,12 +1,13 @@
 ffmpeg_configure_options="--enable-pthreads"
 
 function setup_cross {
-  if [[ $target == "windows-x86_64" ]]; then
+  if [[ $target_os == "windows" ]]; then
     ffmpeg_configure_options="\
-      --arch=x86_64 \
+      --arch=$target_arch \
       --target-os=mingw32 \
       --cross-prefix=$cross_toolchain_prefix-"
   fi
+
 }
 
 function build {

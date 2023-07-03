@@ -2,8 +2,11 @@ options=""
 
 function setup_cross {
   set_toolchain_bins
-  if [[ $target_os == "windows" ]]; then
+  if [[ $target == "windows-x86_64" ]]; then
     options="--target=x86_64-win64-gcc"
+  fi
+  if [[ $target == "windows-i686" ]]; then
+    options="--target=x86-win32-gcc"
   fi
 }
 
