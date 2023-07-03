@@ -2,19 +2,25 @@
 
 git_clean=1 # SEE README
 MJ="j4" # For parallel compilation
-dist_name="dist"
+dist_name="dist" # Where all binaries will be installed.
 
 cd $(dirname "$0")
 
 set -euo pipefail
 
+source ./prepare-cross-compilation.sh
+
 FFMPEG_PKG_CONFIG_PATH=""
 FFMPEG_CFLAGS=""
 FFMPEG_LDFLAGS=""
 
-dist=${PWD}/$dist_name
+dist_relative_path=$dist_name/$target_os/$target_arch/
+
+dist=${PWD}/$dist_relative_path
 
 mkdir -p $dist
+
+
 
 function maybe_clean_module {
   if [ $git_clean -eq 1 ]; then
@@ -32,10 +38,16 @@ function maybe_clean_module {
   fi
 }
 
+# Ensure that no shared library are installed.
+# Otherwise the ffmpeg build system will find them
+# and might use them. Not sure how to avoid that:
+# - not all libraries build system allow to only compile static libs
+# - not sure how to force ffmpeg to prioritize static libs.
 function rm_dll {
   rm -f \
     $dist/$1/lib/*.dylib \
     $dist/$1/lib/*.dll \
+    $dist/$1/bin/*.dll \
     $dist/$1/lib/*.so.* \
     $dist/$1/lib/*.so \
     $dist/$1/lib64/*.so \
@@ -44,6 +56,7 @@ function rm_dll {
 
 function build {
   pushd modules/$1 > /dev/null
+  # If the submodule hasn't been pull, pull it.
   if test -n "$(find ./ -maxdepth 0 -empty)" ; then
     echo "Pulling $1 …"
     git submodule update --init .
@@ -55,7 +68,7 @@ function build {
     rm_dll $1
     maybe_clean_module
   else
-    echo "already built (rm -rf $dist_name/$1 to rebuild). Skipped."
+    echo "already built (rm -rf $dist_relative_path/$1 to rebuild). Skipped."
   fi
   post_build_$2 $1 ${3:-}
   popd > /dev/null
@@ -67,7 +80,7 @@ function post_build_pkgconfig {
   elif [ -d $dist/$1/lib64/pkgconfig ]; then
     FFMPEG_PKG_CONFIG_PATH+=":$dist/$1/lib64/pkgconfig"
   else
-    echo "Could not find pkgconfig in $dist_name/$1"
+    echo "Could not find pkgconfig in $dist_relative_path/$1"
     exit 1
   fi
 }
@@ -114,7 +127,7 @@ function post_build_ffmpeg {
 }
 
 function build_default_autotools {
-  ./configure --prefix=$dist/$1 --disable-shared
+  ./configure --prefix=$dist/$1 --disable-shared $autotools_options
   make -$MJ
   make install
 }
@@ -271,53 +284,68 @@ function build_ffmpeg {
   echo $LDFLAGS
 
   ./configure \
+    ${ffmpeg_configure_options} \
     --extra-ldexeflags="-Bstatic" \
     --pkg-config-flags="--static" \
-    --extra-libs="-lpthread -lm -lz" \
     --disable-autodetect \
     --prefix=$dist/ffmpeg \
-    --enable-libtheora \
-    --enable-libvo-amrwbenc \
+    --disable-libtheora \
+    --enable-version3 \
     --enable-libopencore-amrnb \
     --enable-libopencore-amrwb \
     --enable-gpl \
-    --enable-runtime-cpudetect \
-    --enable-pthreads \
-    --enable-version3 \
-    --enable-libopus \
-    --enable-libvorbis \
-    --enable-libx264 \
-    --enable-libx265 \
-    --enable-libaom \
     --disable-indev=sndio \
     --disable-outdev=sndio \
-    --enable-libvpx \
-    --enable-libwebp \
-    --enable-zlib \
-    --enable-libopenjpeg \
-    --enable-ffprobe \
-    --enable-pic \
-    --enable-openssl \
     --disable-doc
+
+  # ./configure \
+  #   --extra-ldexeflags="-Bstatic" \
+  #   --pkg-config-flags="--static" \
+  #   --extra-libs="-lpthread -lm -lz" \
+  #   --disable-autodetect \
+  #   --prefix=$dist/ffmpeg \
+  #   --enable-libtheora \
+  #   --enable-libvo-amrwbenc \
+  #   --enable-libopencore-amrnb \
+  #   --enable-libopencore-amrwb \
+  #   --enable-gpl \
+  #   --enable-runtime-cpudetect \
+  #   --enable-pthreads \
+  #   --enable-version3 \
+  #   --enable-libopus \
+  #   --enable-libvorbis \
+  #   --enable-libx264 \
+  #   --enable-libx265 \
+  #   --enable-libaom \
+  #   --disable-indev=sndio \
+  #   --disable-outdev=sndio \
+  #   --enable-libvpx \
+  #   --enable-libwebp \
+  #   --enable-zlib \
+  #   --enable-libopenjpeg \
+  #   --enable-ffprobe \
+  #   --enable-pic \
+  #   --enable-openssl \
+  #   --disable-doc
 
   make -$MJ
   make install
 }
 
 # build sdl pkgconfig
-build zlib pkgconfig
-build openssl pkgconfig
-build x264 pkgconfig
-build xvid cflags_dir
-build webp pkgconfig
-build jpeg pkgconfig
-build x265 pkgconfig
-build aom pkgconfig
-build vpx pkgconfig
+# build zlib pkgconfig
+# build openssl pkgconfig
+# build x264 pkgconfig
+# build xvid cflags_dir
+# build webp pkgconfig
+# build jpeg pkgconfig
+# build x265 pkgconfig
+# build aom pkgconfig
+# build vpx pkgconfig
 build ocamr cflags_from_pkgconfig opencore-amrnb
-build voamrwbenc cflags_from_pkgconfig vo-amrwbenc
-build ogg pkgconfig
-build opus pkgconfig
-build theora theora
-build vorbis pkgconfig
+# build voamrwbenc cflags_from_pkgconfig vo-amrwbenc
+# build ogg pkgconfig
+# build opus pkgconfig
+# build theora theora
+# build vorbis pkgconfig
 build ffmpeg ffmpeg
