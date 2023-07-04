@@ -53,21 +53,24 @@ function build {
   }
 
   function post {
-    case "$(uname -s)" in
-      Linux*)
-        deps_count=9
+    case $target_os in
+      linux)
+        deps_count=7
         count=$(ldd $dist/ffmpeg/bin/ffmpeg | wc -l)
         ;;
-      Darwin*)
+      mac)
         deps_count=6
         count=$(otool -L $dist/ffmpeg/bin/ffmpeg | wc -l | tr -d ' ')
+        ;;
+      windows)
+        deps_count=17
+        count=$(objdump -p  $dist/ffmpeg/bin/ffmpeg.exe | grep "DLL Name" | wc -l)
         ;;
       *)
         ;;
     esac
-    if [ ! $count -eq $deps_count ]; then
-      echo "Warning: unexpected amount of dependencies."
+    if [[ ! $count -eq $deps_count ]]; then
+      echo "Error: unexpected amount of dependencies."
+      exit 1
     fi
-    echo "Build is successful. See $dist/ffmpeg"
-    exit 0
   }

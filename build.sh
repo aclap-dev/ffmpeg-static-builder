@@ -58,3 +58,15 @@ for mod in $mods; do
   popd > /dev/null
 
 done
+
+echo "Packaging…"
+
+cd $dist_name
+tmpdir=ffmpeg-$target
+rm -rf $tmpdir
+mkdir -p $tmpdir/presets
+cp $dist/ffmpeg/bin/* $tmpdir
+cp $dist/ffmpeg/share/ffmpeg/*.ffpreset $tmpdir/presets
+tar -cjvf ffmpeg-$target.tar.bz2 $tmpdir
+rm -rf $tmpdir
+cd ..
