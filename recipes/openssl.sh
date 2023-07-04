@@ -10,6 +10,9 @@ function setup_cross {
 }
 
 function build {
+  if [[ $target == "mac-x86_64" ]]; then
+    options="darwin64-x86_64-cc"
+  fi
   ./Configure $options --prefix=$dist/$1
   make -$MJ
   make install_sw
