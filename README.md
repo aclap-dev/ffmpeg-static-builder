@@ -32,18 +32,6 @@ $ ./build.sh
 $ ./build.sh <target>
 ```
 
-Compilation result will be under the `dist/<os>/<arch>/ffmpeg` directory.
+Compilation result will be under the `dist/` directory.
 To rebuild a dependency or ffmpeg itself, `rm -rf` the relevant
-directory in `dist/<o>/<target>/`.
-
-Todo:
-----
-- Windows i686
-- Linux i686
-- Mac Intel
-- Tests
-- test MP3 support (no lame?)
-- remove dependency on libc++ (x265) and libvdso (linux)
-- re-enable xvid: --enable-libxvid
-- --enable-sdl2 --enable-ffplay
-- presets? dist/windows/i686/ffmpeg/share/ffmpeg/
+directory in `dist/<os>/<target>/`.
