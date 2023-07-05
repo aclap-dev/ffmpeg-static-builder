@@ -47,9 +47,15 @@ for mod in $mods; do
     build $mod
     # Cleanup some exports after modules
     unset_toolchain_bins
+    # Ensure that no shared library are installed.
+    # Otherwise the ffmpeg build system will find them
+    # and might use them. Not sure how to avoid that:
+    # - not all libraries build system allow to disable shared libs
+    # - not sure how to force ffmpeg to prioritize static libs.
     rm_dll $mod
     maybe_clean_module
   else
+    rm_dll $mod
     echo "already built (rm -rf $dist_relative_path/$mod to rebuild). Skipped."
   fi
 

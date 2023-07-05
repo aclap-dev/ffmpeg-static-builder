@@ -1,4 +1,4 @@
-ffmpeg_configure_options="--enable-pthreads"
+ffmpeg_configure_options=""
 
 function setup_cross {
   if [[ $target_os == "windows" ]]; then
@@ -27,6 +27,8 @@ function build {
     --enable-version3 \
     --pkg-config=pkg-config \
     --enable-runtime-cpudetect \
+    --enable-pthreads \
+    --disable-w32threads \
     --enable-libtheora \
     --enable-libvpx \
     --enable-libvorbis \

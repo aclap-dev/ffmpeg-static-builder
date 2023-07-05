@@ -55,21 +55,9 @@ function maybe_clean_module {
   fi
 }
 
-# Ensure that no shared library are installed.
-# Otherwise the ffmpeg build system will find them
-# and might use them. Not sure how to avoid that:
-# - not all libraries build system allow to only compile static libs
-# - not sure how to force ffmpeg to prioritize static libs.
 function rm_dll {
-  echo rm_dll
-  rm -f \
-    $dist/$1/lib/*.dylib \
-    $dist/$1/lib/*.dll \
-    $dist/$1/bin/*.dll \
-    $dist/$1/lib/*.so.* \
-    $dist/$1/lib/*.so \
-    $dist/$1/lib64/*.so \
-    $dist/$1/lib64/*.so.*
+  find $dist -iregex '.*\.\(so\|dylib\|dll\)$' -exec rm {} \;
+  find $dist -iregex '.*\.\(so\|dylib\|dll\)\..*' -exec rm {} \;
 }
 
 function post_pkgconfig {
