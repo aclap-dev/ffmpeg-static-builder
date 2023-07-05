@@ -64,6 +64,14 @@ function build {
   function post {
     case $target_os in
       linux)
+        # Allowed and expected system libraries:
+        # linux-vdso.so.1
+        # libm.so.6
+        # libmvec.so.1
+        # libstdc++.so.6
+        # libgcc_s.so.1
+        # libc.so.6
+        # /lib64/ld-linux-x86-64.so.2
         deps_count=7
         count=$(ldd $dist/ffmpeg/bin/ffmpeg | wc -l)
         ;;
