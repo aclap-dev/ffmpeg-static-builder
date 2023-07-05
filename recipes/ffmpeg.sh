@@ -75,7 +75,13 @@ function build {
         count=$(ldd $dist/ffmpeg/bin/ffmpeg | wc -l)
         ;;
       mac)
-        deps_count=6
+        # Allowed and expected system libraries:
+        # /usr/lib/libSystem.B.dylib
+        # /usr/lib/libc++.1.dylib
+        # CoreFoundation.framework/Versions/A/CoreFoundation
+        # CoreVideo.framework/Versions/A/CoreVideo
+        # CoreMedia.framework/Versions/A/CoreMedia
+        deps_count=6 # 5 libs + header line
         count=$(otool -L $dist/ffmpeg/bin/ffmpeg | wc -l | tr -d ' ')
         ;;
       windows)

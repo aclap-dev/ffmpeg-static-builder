@@ -56,8 +56,10 @@ function maybe_clean_module {
 }
 
 function rm_dll {
-  find $dist -iregex '.*\.\(so\|dylib\|dll\)$' -exec rm {} \;
-  find $dist -iregex '.*\.\(so\|dylib\|dll\)\..*' -exec rm {} \;
+  find $dist -iregex '.*\.\(so\|dll\)$' -exec rm {} \;
+  find $dist -iregex '.*\.\(so\|dll\)\..*' -exec rm {} \;
+  find $dist -iregex '.*\.dylib$' -exec rm {} \;
+  find $dist -iregex '.*\.dylib\..*$' -exec rm {} \;
 }
 
 function post_pkgconfig {
