@@ -22,10 +22,12 @@ function build {
   export CFLAGS=$FFMPEG_CFLAGS
   export LDFLAGS=$FFMPEG_LDFLAGS
 
+  ld_static="-static -static-libgcc -static-libstdc++"
+
   ./configure \
     ${ffmpeg_configure_options} \
-    --extra-ldflags="-static -static-libgcc -static-libstdc++" \
-    --extra-ldexeflags="-Bstatic" \
+    --extra-ldflags="$ld_static" \
+    --extra-ldexeflags="$ld_static" \
     --pkg-config-flags="--static" \
     --disable-autodetect \
     --prefix=$dist/ffmpeg \
