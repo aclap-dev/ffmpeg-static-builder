@@ -6,6 +6,10 @@ function setup_cross {
       --arch=$target_arch \
       --target-os=mingw32 \
       --cross-prefix=$cross_toolchain_prefix-"
+
+    FFMPEG_CFLAGS+=" -I/usr/$cross_toolchain_prefix/include/"
+    FFMPEG_LDFLAGS+=" -L/usr/$cross_toolchain_prefix/lib/"
+
   fi
 
 }
@@ -20,6 +24,7 @@ function build {
 
   ./configure \
     ${ffmpeg_configure_options} \
+    --extra-ldflags="-static -static-libgcc -static-libstdc++" \
     --extra-ldexeflags="-Bstatic" \
     --pkg-config-flags="--static" \
     --disable-autodetect \
@@ -65,7 +70,21 @@ function build {
         count=$(otool -L $dist/ffmpeg/bin/ffmpeg | wc -l | tr -d ' ')
         ;;
       windows)
-        deps_count=17
+        # Allowed and expected system libraries:
+        # ADVAPI32.dll
+        # bcrypt.dll
+        # GDI32.dll
+        # KERNEL32.dll
+        # msvcrt.dll
+        # ole32.dll
+        # OLEAUT32.dll
+        # PSAPI.DLL
+        # SHELL32.dll
+        # SHLWAPI.dll
+        # USER32.dll
+        # AVICAP32.dll
+        # WS2_32.dll
+        deps_count=13
         count=$(objdump -p  $dist/ffmpeg/bin/ffmpeg.exe | grep "DLL Name" | wc -l)
         ;;
       *)
