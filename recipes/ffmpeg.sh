@@ -1,4 +1,5 @@
 ffmpeg_configure_options=""
+ld_static=""
 
 function setup_cross {
   if [[ $target_os == "windows" ]]; then
@@ -6,8 +7,6 @@ function setup_cross {
     ffmpeg_configure_options="\
       --arch=$target_arch \
       --target-os=mingw32 \
-      --extra-ldflags="$ld_static" \
-      --extra-ldexeflags="$ld_static" \
       --cross-prefix=$cross_toolchain_prefix-"
 
     FFMPEG_CFLAGS+=" -I/usr/$cross_toolchain_prefix/include/"
@@ -27,6 +26,8 @@ function build {
 
   ./configure \
     ${ffmpeg_configure_options} \
+    --extra-ldflags="$ld_static" \
+    --extra-ldexeflags="$ld_static" \
     --pkg-config-flags="--static" \
     --disable-autodetect \
     --prefix=$dist/ffmpeg \
