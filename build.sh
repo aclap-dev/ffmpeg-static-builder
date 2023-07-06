@@ -24,7 +24,7 @@ dist=${PWD}/$dist_relative_path
 mkdir -p $dist
 
 #FIXME: skipping xvid
-mods="aom jpeg ocamr ogg openssl opus sdl theora voamrwbenc vorbis vpx webp x264 x265 zlib ffmpeg"
+mods="lame aom jpeg ocamr ogg openssl opus sdl theora voamrwbenc vorbis vpx webp x264 x265 zlib ffmpeg"
 
 for mod in $mods; do
 
