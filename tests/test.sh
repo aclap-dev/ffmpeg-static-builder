@@ -2,6 +2,8 @@
 
 # dependencies: jq and dialog
 
+cd $(dirname "$0")/..
+
 set -euo pipefail
 
 err_report() {
@@ -49,7 +51,7 @@ rm out1.json
 
 ################# Test 2
 
-./ffmpeg $gargs -i ./out1.mp4 -i ../../ffmpeg-icon.png \
+./ffmpeg $gargs -i ./out1.mp4 -i ../../tests/ffmpeg-icon.png \
   -filter_complex "[0:v][1:v] overlay=7:7 [m]" \
   -c:v h264 -c:a copy -map 0:a -map [m] \
   out2.mp4
@@ -57,12 +59,10 @@ rm out1.json
 nb_stream_out2=$(jq '.format.nb_streams' ./out2.json)
 [ $nb_stream_out2 -eq 2 ]
 
-open ./out2.mp4 # Fixme: won't work on Linux
-
 set +e
 dialog --keep-tite --title "Please check the playing video" \
   --backtitle "FFMpeg tests" \
-  --yesno "Does it include a ffmpeg icon as an overlay?" 7 60
+  --yesno "Does $dist/out2.mpg include a ffmpeg icon as an overlay?" 7 60
 if [ ! $? -eq 0 ]; then
   echo "no overlay error"
   exit 1
