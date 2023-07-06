@@ -49,3 +49,6 @@
 [submodule "modules/zlib"]
 	path = modules/zlib
 	url = https://github.com/madler/zlib.git
+[submodule "modules/lame"]
+	path = modules/lame
+	url = git@github.com:paulrouget/lame.git

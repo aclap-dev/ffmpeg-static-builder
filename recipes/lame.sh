@@ -3,7 +3,13 @@ function setup_cross {
 }
 
 function build {
-  build_autotools $1
+  ./configure \
+    --prefix=$dist/$1 \
+    --disable-dependency-tracking \
+    --disable-debug \
+    --enable-nasm
+  make -$MJ
+  make install
 }
 
 function post {
