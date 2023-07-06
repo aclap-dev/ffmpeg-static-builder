@@ -1,19 +1,16 @@
 FFMPEG BUILD SCRIPT
 -------------------
 
-- Trying to avoid dynamic library dependencies.
+- Trying to avoid dynamic library dependencies (see `recipes/ffmpeg.sh` for a list of allowed dynamic libraries).
 - Dependencies are git submodules.
 
 IMPORTANT:
 ---------
 
-Any changes in a submodule (`modules/*`) will be
-erased by the script (see `maybe_clean_module` function).
+Any changes in a submodule (`modules/*`) will be erased by the script (see `maybe_clean_module` function).
 
 Usage:
 -----
-
-To do a non-cross-compile build:
 
 ```
 $ ./build.sh
@@ -35,3 +32,14 @@ $ ./build.sh <target>
 Compilation result will be under the `dist/` directory.
 To rebuild a dependency or ffmpeg itself, `rm -rf` the relevant
 directory in `dist/<os>/<target>/`.
+
+Test:
+----
+
+Execute a few tests to make sure basic features are properly supported.
+
+`jq` and `dialog` necessary.
+
+```
+$ ./tests/test.sh
+```
