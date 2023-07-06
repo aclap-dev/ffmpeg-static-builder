@@ -25,7 +25,13 @@ Usage:
 $ ./build.sh
 ```
 
-5 supported targets:
+Cross-compilation:
+
+```
+$ ./build.sh <target>
+```
+
+Targets:
 
 - `linux-x86_64`
 - `linux-i686`
@@ -33,10 +39,6 @@ $ ./build.sh
 - `windows-i686`
 - `mac-x86_64`
 - `mac-arm64`
-
-```
-$ ./build.sh <target>
-```
 
 Compilation result will be under the `dist/` directory.
 To rebuild a dependency or ffmpeg itself, `rm -rf` the relevant
