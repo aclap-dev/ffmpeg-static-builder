@@ -71,9 +71,10 @@ set -e
 
 ################# Test 3 - codecs
 
-./ffmpeg $gargs -i out1.mp4 -c:v libx265 -c:a copy out4.mp4
-./ffmpeg $gargs -i out4.mp4 -vcodec libx264 -acodec aac ou5.mp4
 ./ffmpeg $gargs -i out1.mp4 -vn out3.mp3
+./ffmpeg $gargs -i out1.mp4 -c:v libx265 -c:a copy out4.mp4
+./ffmpeg $gargs -i out4.mp4 -vcodec libx264 -acodec aac out5.mp4
+./ffmpeg $gargs -i out1.mp4 -c:v mpeg4 -vtag xvid out6.avi
 
 # Cleanup
 cd ../..

@@ -52,6 +52,7 @@ function build {
     --enable-libx265 \
     --enable-libaom \
     --enable-libwebp \
+    --enable-libxvid \
     --enable-libmp3lame \
     --enable-zlib \
     --enable-ffprobe \
