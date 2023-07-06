@@ -9,7 +9,9 @@ VERSION:
 
 Releases are tagged as such:
 
-`ffmpeg-<ffmpeg-commit>-<ffmeg-date>-<build-number>`
+`ffmpeg-<ffmpeg-commit>-<ffmpeg-date>-<build-number>`
+
+For example release [`ffmpeg-285c7f6f6b-2023-06-26-001`](https://github.com/paulrouget/ffmpeg-static-builder/releases/tag/ffmpeg-285c7f6f6b-2023-06-26-001) is the first build of [ffmpeg commit 285c7f6f6b](https://github.com/FFmpeg/FFmpeg/commit/285c7f6f6b) which was commited on 2023-06-26.
 
 IMPORTANT:
 ---------
