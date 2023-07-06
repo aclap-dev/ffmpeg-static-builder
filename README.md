@@ -36,10 +36,14 @@ directory in `dist/<os>/<target>/`.
 Test:
 ----
 
+```
+$ ./tests/test.sh
+```
+
 Execute a few tests to make sure basic features are properly supported.
 
 `jq` and `dialog` necessary.
 
-```
-$ ./tests/test.sh
-```
+On Windows, the script must be run from MSYS2, and jq.exe should be in the path.
+`dialog` can be installed via `pacman -S dialog`.
+
