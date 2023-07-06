@@ -9,18 +9,12 @@ case $host_os in
   Darwin)
     host_os="mac"
     ;;
+  MINGW*)
+    host_os="windows"
+    ;;
 esac
 
 host="${host_os}-${host_arch}"
-
-case $host in
-  "linux-x86_64" | "mac-x86_64" | "mac-arm64")
-    ;;
-  *)
-    echo "Unsupported build platform"
-    exit 1
-    ;;
-esac
 
 if [ $# -eq 0 ]; then
   target_os=$host_os
