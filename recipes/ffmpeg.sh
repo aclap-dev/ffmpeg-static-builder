@@ -1,5 +1,6 @@
 ffmpeg_configure_options=""
 ld_static=""
+extra_libs=""
 
 function setup_cross {
   if [[ $target_os == "windows" ]]; then
@@ -8,12 +9,9 @@ function setup_cross {
       --arch=$target_arch \
       --target-os=mingw32 \
       --cross-prefix=$cross_toolchain_prefix-"
-
     FFMPEG_CFLAGS+=" -I/usr/$cross_toolchain_prefix/include/"
     FFMPEG_LDFLAGS+=" -L/usr/$cross_toolchain_prefix/lib/"
-
   fi
-
 }
 
 function build {
@@ -24,8 +22,13 @@ function build {
   export CFLAGS=$FFMPEG_CFLAGS
   export LDFLAGS=$FFMPEG_LDFLAGS
 
+  if [[ $target == "linux-x86_64" ]]; then
+    extra_libs="-lm"
+  fi
+
   ./configure \
     ${ffmpeg_configure_options} \
+    --extra-libs="$extra_libs" \
     --extra-ldflags="$ld_static" \
     --extra-ldexeflags="$ld_static" \
     --pkg-config-flags="--static" \
