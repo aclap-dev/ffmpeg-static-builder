@@ -12,10 +12,10 @@ err_report() {
 
 trap 'err_report $LINENO' ERR
 
-source ./xcomp.sh
+source ./recipes/xcomp.sh
 
 dist=dist/tests
-# rm -rf $dist
+rm -rf $dist
 mkdir -p $dist
 cd $dist
 
@@ -26,7 +26,7 @@ mv ffmpeg-$host/ffprobe .
 
 gargs="-progress pipe:1 -hide_banner -loglevel error -y"
 
-################# Test 0
+################# Test 0 - hls ffprobe
 
 url='https://storage.googleapis.com/shaka-demo-assets/angel-one-hls/hls.m3u8'
 
@@ -40,16 +40,16 @@ nb_programs_out0=$(jq '.format.nb_programs' ./out0.json)
 
 rm out0.json
 
-################# Test 1
+################# Test 1 - hls ffmpeg
 
-# ./ffmpeg $gargs -i "$url" -map 0:5 -map 0:9 out1.mp4
+./ffmpeg $gargs -i "$url" -map 0:5 -map 0:9 out1.mp4
 ./ffprobe -print_format json -show_format -show_streams ./out1.mp4 > out1.json
 nb_stream_out1=$(jq '.format.nb_streams' ./out1.json)
 [ $nb_stream_out1 -eq 2 ]
 
 rm out1.json
 
-################# Test 2
+################# Test 2 - overlays
 
 ./ffmpeg $gargs -i ./out1.mp4 -i ../../tests/ffmpeg-icon.png \
   -filter_complex "[0:v][1:v] overlay=7:7 [m]" \
@@ -69,15 +69,13 @@ if [ ! $? -eq 0 ]; then
 fi
 set -e
 
-################# Test 3
+################# Test 3 - codecs
 
 ./ffmpeg $gargs -i out1.mp4 -c:v libx265 -c:a copy out4.mp4
 ./ffmpeg $gargs -i out4.mp4 -vcodec libx264 -acodec aac ou5.mp4
-# FIXME: ./ffmpeg $gargs -i out1.mp4 -vn out3.mp3
+./ffmpeg $gargs -i out1.mp4 -vn out3.mp3
 
-
+# Cleanup
 cd ../..
-
 rm -rf $dist
-
 echo "All tests passed"
