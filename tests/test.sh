@@ -60,9 +60,9 @@ nb_stream_out2=$(jq '.format.nb_streams' ./out2.json)
 [ $nb_stream_out2 -eq 2 ]
 
 set +e
-dialog --keep-tite --title "Please check the playing video" \
+dialog --keep-tite --title "Please check video $dist/out2.mp4" \
   --backtitle "FFMpeg tests" \
-  --yesno "Does $dist/out2.mpg include a ffmpeg icon as an overlay?" 7 60
+  --yesno "Does $dist/out2.mp4 include a ffmpeg icon as an overlay?" 7 60
 if [ ! $? -eq 0 ]; then
   echo "no overlay error"
   exit 1

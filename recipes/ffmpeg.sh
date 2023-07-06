@@ -22,13 +22,9 @@ function build {
   export CFLAGS=$FFMPEG_CFLAGS
   export LDFLAGS=$FFMPEG_LDFLAGS
 
-  if [[ $target == "linux-x86_64" ]]; then
-    extra_libs="-lm"
-  fi
-
   ./configure \
     ${ffmpeg_configure_options} \
-    --extra-libs="$extra_libs" \
+    --extra-libs="$FFMPEG_EXTRA_LIBS" \
     --extra-ldflags="$ld_static" \
     --extra-ldexeflags="$ld_static" \
     --pkg-config-flags="--static" \

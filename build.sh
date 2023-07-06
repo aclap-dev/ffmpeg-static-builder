@@ -13,6 +13,7 @@ source ./recipes/functions.sh
 FFMPEG_PKG_CONFIG_PATH=""
 FFMPEG_CFLAGS=""
 FFMPEG_LDFLAGS=""
+FFMPEG_EXTRA_LIBS=""
 
 autotools_options=""
 cmake_options=""
