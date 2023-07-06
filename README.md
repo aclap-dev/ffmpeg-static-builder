@@ -4,6 +4,13 @@ FFMPEG BUILD SCRIPT
 - Trying to avoid dynamic library dependencies (see `recipes/ffmpeg.sh` for a list of allowed dynamic libraries).
 - Dependencies are git submodules.
 
+VERSION:
+-------
+
+Releases are tagged as such:
+
+`ffmpeg-<ffmpeg-commit>-<ffmeg-date>-<build-number>`
+
 IMPORTANT:
 ---------
 
