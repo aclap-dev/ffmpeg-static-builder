@@ -8,7 +8,7 @@ cd $(dirname "$0")
 
 set -euo pipefail
 
-source ./functions.sh
+source ./recipes/functions.sh
 
 FFMPEG_PKG_CONFIG_PATH=""
 FFMPEG_CFLAGS=""
@@ -17,7 +17,7 @@ FFMPEG_LDFLAGS=""
 autotools_options=""
 cmake_options=""
 
-source ./xcomp.sh
+source ./recipes/xcomp.sh
 
 dist_relative_path=$dist_name/$target_os/$target_arch/
 dist=${PWD}/$dist_relative_path
