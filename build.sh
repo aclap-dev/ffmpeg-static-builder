@@ -8,7 +8,7 @@ cd $(dirname "$0")
 
 set -euo pipefail
 
-source ./utils.sh
+source ./functions.sh
 
 FFMPEG_PKG_CONFIG_PATH=""
 FFMPEG_CFLAGS=""
