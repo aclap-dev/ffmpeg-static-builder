@@ -81,13 +81,8 @@ if [ $cross_compiling -eq 1 ]; then
     fi
   fi
 
-  if [[ $target == "windows-x86_64" ]]; then
-    cross_toolchain_prefix="x86_64-w64-mingw32"
-    setup_toolchain
-  fi
-
-  if [[ $target == "windows-i686" ]]; then
-    cross_toolchain_prefix="i686-w64-mingw32"
+  if [[ $target_os == "windows" ]]; then
+    cross_toolchain_prefix="$target_arch-w64-mingw32"
     setup_toolchain
   fi
 
