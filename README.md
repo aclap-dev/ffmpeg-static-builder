@@ -13,7 +13,7 @@ For example release [`ffmpeg-285c7f6f6b-2023-06-26-001`](https://github.com/paul
 **Important**: Any changes in a submodule (`modules/*`) will be erased by the script (see `maybe_clean_module` function).
 
 Mac dependencies:
---------
+----------------
 
 ```
 brew install \
@@ -22,6 +22,18 @@ brew install \
   libtool \
   pkg-config \
   yasm nasm \
+  cmake
+```
+
+Ubuntu dependencies:
+-------------------
+
+```
+apt-install \
+  build-essential \
+  autoconf2.13 autoconf \
+  libtool \
+  yasm nams \
   cmake
 ```
 
