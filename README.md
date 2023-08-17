@@ -29,11 +29,11 @@ Ubuntu dependencies:
 -------------------
 
 ```
-apt-install \
+apt install \
   build-essential \
   autoconf2.13 autoconf \
   libtool \
-  yasm nams \
+  yasm nasm \
   cmake
 ```
 
