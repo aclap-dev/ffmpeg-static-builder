@@ -40,9 +40,6 @@
 [submodule "modules/openssl"]
 	path = modules/openssl
 	url = https://github.com/openssl/openssl.git
-[submodule "modules/sdl"]
-	path = modules/sdl
-	url = https://github.com/libsdl-org/SDL.git
 [submodule "modules/theora"]
 	path = modules/theora
 	url = https://github.com/xiph/theora.git
