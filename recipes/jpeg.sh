@@ -14,6 +14,9 @@ function build {
 }
 
 function post {
+  if [[ $target == "linux-x86_64" ]]; then
+    FFMPEG_EXTRA_LIBS+=" -lpthread"
+  fi
   post_pkgconfig $@
 }
 
