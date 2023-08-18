@@ -45,7 +45,7 @@ function maybe_clean_module {
     # git checkout -f && git clean -fdx are dangerous.
     # Let's double check we are indeed in a submodule.
     # .git is a file only in submodules.
-    if [ -s .git ]; then
+    if [ -f .git ]; then
       git checkout -f > /dev/null
       git clean -fdx > /dev/null
     else
