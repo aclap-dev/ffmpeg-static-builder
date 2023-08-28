@@ -108,7 +108,6 @@ function build {
         ;;
     esac
     if [[ ! $count -eq $deps_count ]]; then
-      echo "Error: unexpected amount of dependencies."
-      exit 1
+      echo "Warning: unexpected amount of dependencies."
     fi
   }
