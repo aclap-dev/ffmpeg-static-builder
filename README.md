@@ -12,22 +12,6 @@ For example release [`ffmpeg-285c7f6f6b-2023-06-26-001`](https://github.com/acla
 
 **Important**: Any changes in a submodule (`modules/*`) will be erased by the script (see `maybe_clean_module` function).
 
-Building with docker:
---------------------
-
-This is optional:
-
-```bash
-# Linux builds
-docker build -t linux . -f ./Dockerfile.linux
-docker cp linux:/ffmpeg-static/dist/ffmpeg-linux-x86_64.tar.bz2 .
-
-# Windows builds (cross compiled)
-docker build -t windows . -f ./Dockerfile.windows
-docker cp windows:/ffmpeg-static/dist/ffmpeg-windows-x86_64.tar.bz2 .
-docker cp windows:/ffmpeg-static/dist/ffmpeg-windows-i686.tar.bz2 .
-```
-
 Mac dependencies:
 ----------------
 
@@ -71,6 +55,17 @@ Targets:
 Compilation result will be under the `dist/` directory.
 To rebuild a dependency or ffmpeg itself, `rm -rf` the relevant
 directory in `dist/<os>/<target>/`.
+
+Build with docker:
+-----------------
+
+Will build Linux and Windows builds.
+
+```bash
+./docker.sh
+```
+
+Compilation result will be under the `dist/` directory.
 
 Test:
 ----
