@@ -16,3 +16,5 @@ docker container create --name temp windows
 docker container cp temp:/ffmpeg-static/dist/ffmpeg-windows-x86_64.tar.bz2 dist
 docker container cp temp:/ffmpeg-static/dist/ffmpeg-windows-i686.tar.bz2 dist
 docker container rm temp
+docker image rm linux
+docker image rm windows
