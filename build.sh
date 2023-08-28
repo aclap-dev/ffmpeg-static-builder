@@ -30,13 +30,13 @@ for mod in $mods; do
 
   source recipes/$mod.sh
 
-  pushd modules/$mod > /dev/null
-
   # If the submodule hasn't been pull, pull it.
-  if test -n "$(find ./ -maxdepth 0 -empty)" ; then
+  if test -n "$(find modules/$mod -maxdepth 0 -empty)" ; then
     echo "Pulling $mod …"
-    git submodule update --init .
+    git submodule update --init modules/$mod
   fi
+
+  pushd modules/$mod > /dev/null
 
   if [ ! -d $dist/$mod ]; then
     maybe_clean_module
