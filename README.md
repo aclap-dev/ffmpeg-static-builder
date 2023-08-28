@@ -24,8 +24,8 @@ docker cp linux:/ffmpeg-static/dist/ffmpeg-linux-x86_64.tar.bz2 .
 
 # Windows builds (cross compiled)
 docker build -t windows . -f ./Dockerfile.windows
-docker cp linux:/ffmpeg-static/dist/ffmpeg-windows-x86_64.tar.bz2 .
-docker cp linux:/ffmpeg-static/dist/ffmpeg-windows-i686.tar.bz2 .
+docker cp windows:/ffmpeg-static/dist/ffmpeg-windows-x86_64.tar.bz2 .
+docker cp windows:/ffmpeg-static/dist/ffmpeg-windows-i686.tar.bz2 .
 ```
 
 Mac dependencies:
