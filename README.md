@@ -8,9 +8,25 @@ Releases are tagged as such:
 
 `ffmpeg-<ffmpeg-commit>-<ffmpeg-date>-<build-number>`
 
-For example release [`ffmpeg-285c7f6f6b-2023-06-26-001`](https://github.com/paulrouget/ffmpeg-static-builder/releases/tag/ffmpeg-285c7f6f6b-2023-06-26-001) is the first build of [ffmpeg commit 285c7f6f6b](https://github.com/FFmpeg/FFmpeg/commit/285c7f6f6b) which was commited on 2023-06-26.
+For example release [`ffmpeg-285c7f6f6b-2023-06-26-001`](https://github.com/aclap-dev/ffmpeg-static-builder/releases/tag/ffmpeg-285c7f6f6b-2023-06-26-001) is the first build of [ffmpeg commit 285c7f6f6b](https://github.com/FFmpeg/FFmpeg/commit/285c7f6f6b) which was commited on 2023-06-26.
 
 **Important**: Any changes in a submodule (`modules/*`) will be erased by the script (see `maybe_clean_module` function).
+
+Building with docker:
+--------------------
+
+This is optional:
+
+```bash
+# Linux builds
+docker build -t linux . -f ./Dockerfile.linux
+docker cp linux:/ffmpeg-static/dist/ffmpeg-linux-x86_64.tar.bz2 .
+
+# Windows builds (cross compiled)
+docker build -t windows . -f ./Dockerfile.windows
+docker cp linux:/ffmpeg-static/dist/ffmpeg-windows-x86_64.tar.bz2 .
+docker cp linux:/ffmpeg-static/dist/ffmpeg-windows-i686.tar.bz2 .
+```
 
 Mac dependencies:
 ----------------
@@ -25,17 +41,10 @@ brew install \
   cmake
 ```
 
-Ubuntu dependencies:
--------------------
+Linux & Windows dependencies:
+----------------------------
 
-```
-apt install \
-  build-essential \
-  autoconf2.13 autoconf \
-  libtool \
-  yasm nasm \
-  cmake
-```
+See Docker files.
 
 Usage:
 -----

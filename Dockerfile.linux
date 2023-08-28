@@ -1,0 +1,39 @@
+FROM oraclelinux:7
+
+USER root:root
+WORKDIR /ffmpeg-static/
+
+RUN yum install -y oracle-softwarecollection-release-el7
+
+RUN yum-config-manager --enable ol7_latest ol7_optional_latest software_collections
+RUN yum upgrade -y
+
+RUN yum install -y \
+    devtoolset-10 glibc-headers kernel-headers \
+    make git autoconfig libtool gcc gcc-c++ \
+    perl-IPC-Cmd wget bzip2
+
+COPY . ./
+
+# Install and configure a recent version of cmake
+RUN wget https://github.com/Kitware/CMake/releases/download/v3.26.5/cmake-3.26.5-linux-x86_64.tar.gz
+RUN tar -xf cmake-3.26.5-linux-x86_64.tar.gz
+RUN mv cmake-3.26.5-linux-x86_64 opt
+ENV CMAKE_ROOT=/ffmpeg-static/opt/share/cmake-3.27
+
+# Install a recent version of yasm
+RUN git clone https://github.com/yasm/yasm.git && \
+    cd yasm \
+    git checkout v1.3.0 && \
+    ./autogen.sh && ./configure --prefix=/ffmpeg-static/opt && make && make install
+
+# Install a recent version of nasm
+RUN wget https://www.nasm.us/pub/nasm/releasebuilds/2.13.03/linux/nasm-2.13.03-0.fc24.x86_64.rpm && \
+    rpm -i ./nasm-2.13.03-0.fc24.x86_64.rpm
+
+# Cleanup
+RUN rm -rf dist cmake-3.26.5-linux-x86_64.tar.gz nasm-2.13.03-0.fc24.x86_64.rpm yasm/
+
+ENV PATH=/ffmpeg-static/opt/bin:$PATH
+
+RUN scl enable devtoolset-10 ./build.sh

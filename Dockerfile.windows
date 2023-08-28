@@ -1,0 +1,30 @@
+FROM ubuntu:22.04
+
+USER root:root
+WORKDIR /ffmpeg-static/
+
+RUN apt update
+
+RUN apt install -y \
+  build-essential \
+  git \
+  autoconf2.13 autoconf \
+  libtool \
+  yasm nasm \
+  cmake \
+  pkg-config \
+  gcc-mingw-w64-x86-64 \
+  gcc-mingw-w64-i686 \
+  gcc-multilib \
+  lib32stdc++-11-dev \
+  g++-mingw-w64-x86-64 \
+  mingw-w64-tools \
+  g++-mingw-w64-i686 \
+  libxkbcommon-dev \
+  g++-multilib \
+  g++
+
+COPY . ./
+
+RUN ./build.sh windows-x86_64
+RUN ./build.sh windows-i686
