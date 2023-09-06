@@ -27,7 +27,7 @@ function build {
 }
 
 function post {
-  if [[ $target == "linux-x86_64" ]]; then
+  if [[ $target == "linux-aarch64" ]] || [[ $target == "linux-x86_64" ]]; then
     FFMPEG_EXTRA_LIBS+=" -lm"
   fi
   post_cflags_dir $@
