@@ -6,7 +6,7 @@
 	url = https://gitlab.xiph.org/xiph/ogg.git
 [submodule "vorbis"]
 	path = modules/vorbis
-	url = https://gitlab.xiph.org/xiph/vorbis.git
+	url = https://github.com/paulrouget/vorbis.git
 [submodule "opus"]
 	path = modules/opus
 	url = https://gitlab.xiph.org/xiph/opus.git

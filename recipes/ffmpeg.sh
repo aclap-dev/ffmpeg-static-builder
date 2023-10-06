@@ -40,6 +40,7 @@ function build {
     --enable-libvorbis \
     --disable-indev=sndio \
     --disable-outdev=sndio \
+    --enable-neon \
     --enable-libopenjpeg \
     --enable-libopencore-amrnb \
     --enable-libopencore-amrwb \
