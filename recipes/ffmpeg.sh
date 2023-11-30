@@ -57,7 +57,9 @@ function build {
     --enable-zlib \
     --enable-ffprobe \
     --enable-pic \
-    --disable-doc
+    --disable-doc \
+    --enable-demuxer=dash \
+    --enable-libxml2
 
     make -$MJ
     make install

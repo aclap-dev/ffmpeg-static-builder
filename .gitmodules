@@ -49,3 +49,6 @@
 [submodule "modules/lame"]
 	path = modules/lame
 	url = https://github.com/paulrouget/lame.git
+[submodule "modules/libxml2"]
+	path = modules/libxml2
+	url = https://gitlab.gnome.org/GNOME/libxml2.git
