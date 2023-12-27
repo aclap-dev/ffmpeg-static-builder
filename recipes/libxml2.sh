@@ -15,5 +15,6 @@ function build {
 }
 
 function post {
+  FFMPEG_CFLAGS+=" -I${dist}/libxml2/include"
   post_pkgconfig $@
 }
