@@ -24,7 +24,7 @@ dist_relative_path=$dist_name/$target_os/$target_arch/
 dist=${PWD}/$dist_relative_path
 mkdir -p $dist
 
-mods="libxml2 xvid lame aom jpeg ocamr ogg openssl opus theora voamrwbenc vorbis vpx webp x264 x265 zlib ffmpeg"
+mods="zlib libxml2 xvid lame aom jpeg ocamr ogg openssl opus theora voamrwbenc vorbis vpx webp x264 x265 ffmpeg"
 
 for mod in $mods; do
 
