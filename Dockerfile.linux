@@ -21,6 +21,12 @@ RUN tar -xf cmake-3.26.5-linux-x86_64.tar.gz
 RUN mv cmake-3.26.5-linux-x86_64 opt
 ENV CMAKE_ROOT=/ffmpeg-static/opt/share/cmake-3.27
 
+# Install a recent version of pkg-config
+RUN wget https://pkgconfig.freedesktop.org/releases/pkg-config-0.28.tar.gz && \
+  tar -xf pkg-config-0.28.tar.gz && \
+  cd pkg-config-0.28 && \
+  ./configure --with-internal-glib --prefix=/ffmpeg-static/opt && make && make install
+
 # Install a recent version of yasm
 RUN git clone https://github.com/yasm/yasm.git && \
     cd yasm \
