@@ -69,6 +69,6 @@ rm -rf $tmpdir
 mkdir -p $tmpdir/presets
 cp $dist/ffmpeg/bin/* $tmpdir
 cp $dist/ffmpeg/share/ffmpeg/*.ffpreset $tmpdir/presets
-tar -cjvf ffmpeg-$target-$version.tar.bz2 $tmpdir
+tar -cjvf ffmpeg-$version-$target.tar.bz2 $tmpdir
 rm -rf $tmpdir
 cd ..
