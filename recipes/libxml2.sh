@@ -3,14 +3,18 @@ function setup_cross {
 }
 
 function build {
-  ./autogen.sh
-  ./configure --prefix=$dist/$1 \
-    $autotools_options \
-    --enable-static \
-    --without-iconv \
-    --without-lzma \
-    --without-python
-  make -$MJ
+  mkdir build
+  cd build
+  cmake \
+    $cmake_options \
+    -DCMAKE_INSTALL_PREFIX="$dist/$1" \
+    -DLIBXML2_WITH_LZMA=OFF  \
+    -DLIBXML2_WITH_ICONV=OFF \
+    -DLIBXML2_WITH_PYTHON=OFF \
+    -DLIBXML2_WITH_ZLIB=OFF \
+    -DBUILD_SHARED_LIBS=OFF \
+    -DCMAKE_BUILD_TYPE=Release  \
+    ..
   make install
 }
 

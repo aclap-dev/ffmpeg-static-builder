@@ -6,8 +6,8 @@ set -euo pipefail
 
 version=$(<VERSION)
 
-docker build -t linux . -f ./Dockerfile.linux
-docker build -t windows . -f ./Dockerfile.windows
+docker build -t linux . -f ./Dockerfile.linux --progress=plain
+docker build -t windows . -f ./Dockerfile.windows --progress=plain
 
 mkdir dist
 
