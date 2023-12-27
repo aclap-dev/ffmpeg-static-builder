@@ -3,6 +3,7 @@
 git_clean=1 # SEE README
 MJ="j4" # For parallel compilation
 dist_name="dist" # Where all binaries will be installed.
+version=$(<VERSION)
 
 cd $(dirname "$0")
 
@@ -68,6 +69,6 @@ rm -rf $tmpdir
 mkdir -p $tmpdir/presets
 cp $dist/ffmpeg/bin/* $tmpdir
 cp $dist/ffmpeg/share/ffmpeg/*.ffpreset $tmpdir/presets
-tar -cjvf ffmpeg-$target.tar.bz2 $tmpdir
+tar -cjvf ffmpeg-$target-$version.tar.bz2 $tmpdir
 rm -rf $tmpdir
 cd ..
