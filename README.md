@@ -81,3 +81,9 @@ Execute a few tests to make sure basic features are properly supported.
 On Windows, the script must be run from MSYS2, and jq.exe should be in the path.
 `dialog` can be installed via `pacman -S dialog`.
 
+
+Note:
+----
+
+If on Apple Silicon AOM fails to compile and gets stuck on a call to /usr/bin/as,
+remove `Wl,` in GNU.cmake under the homebrer Ceilar.

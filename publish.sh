@@ -13,6 +13,6 @@ files=(
   "dist/ffmpeg-$version-mac-x86_64.tar.bz2"
   "dist/ffmpeg-$version-windows-i686.tar.bz2"
   "dist/ffmpeg-$version-windows-x86_64.tar.bz2"
-}
+)
 
 gh release upload v$version "${files[@]}" --clobber
